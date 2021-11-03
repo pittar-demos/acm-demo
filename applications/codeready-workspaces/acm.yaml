@@ -1,0 +1,49 @@
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: codeready-workspaces
+  namespace: openshift-workspaces
+  annotations:
+    apps.open-cluster-management.io/deployables: ''
+spec:
+  componentKinds:
+    - group: apps.open-cluster-management.io
+      kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - codeready-workspaces
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  name: codeready-workspaces-subscription-1
+  namespace: openshift-workspaces
+  annotations:
+    apps.open-cluster-management.io/git-branch: ''
+    apps.open-cluster-management.io/git-path: gitops/codeready-workspaces
+    apps.open-cluster-management.io/reconcile-option: merge
+  labels:
+    app: codeready-workspaces
+spec:
+  channel: ggithubcom-pittar-demos-acm-demo-ns/ggithubcom-pittar-demos-acm-demo
+  placement:
+    placementRef:
+      name: codeready-workspaces-placement-1
+      kind: PlacementRule
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: codeready-workspaces-placement-1
+  namespace: openshift-workspaces
+  annotations: {}
+  labels:
+    app: codeready-workspaces
+spec:
+  clusterSelector:
+    matchLabels:
+      devtools: 'true'
