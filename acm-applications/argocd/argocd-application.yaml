@@ -12,7 +12,7 @@ apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
   name: developer-gitops
-  namespace: developer-gitoips
+  namespace: developer-gitops
 spec:
   componentKinds:
   - group: apps.open-cluster-management.io
@@ -46,7 +46,7 @@ metadata:
   labels:
     app: developer-gitops
   name: developer-gitops-subscription-1
-  namespace: developer-gitoips
+  namespace: developer-gitops
 spec:
   channel: channel-developer-gitops/developer-gitops
   placement:
@@ -60,7 +60,7 @@ metadata:
   labels:
     app: developer-gitops
   name: developer-gitops-placement-1
-  namespace: developer-gitoips
+  namespace: developer-gitops
 spec:
   clusterSelector:
     matchLabels:
