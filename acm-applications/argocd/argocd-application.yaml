@@ -1,13 +1,18 @@
 apiVersion: v1                    
 kind: Namespace
 metadata:
-  name: gitops                             
+  name: developer-gitops                             
+---
+apiVersion: v1                    
+kind: Namespace
+metadata:
+  name: channel-developer-gitops                             
 ---
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
-  name: developer-argocd
-  namespace: gitops
+  name: developer-gitops
+  namespace: developer-gitoips
 spec:
   componentKinds:
   - group: apps.open-cluster-management.io
@@ -18,15 +23,15 @@ spec:
       - key: app
         operator: In
         values: 
-          - developer-argocd
+          - developer-gitops
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
   annotations:
     apps.open-cluster-management.io/reconcile-rate: high
-  name: ggithubcom-pittar-demos-acm-demo
-  namespace: ggithubcom-pittar-demos-acm-demo-ns
+  name: developer-gitops
+  namespace: channel-developer-gitops
 spec:
   type: Git
   pathname: 'https://github.com/pittar-demos/acm-demo'
@@ -39,23 +44,23 @@ metadata:
     apps.open-cluster-management.io/git-path: gitops/openshift-gitops
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
-    app: developer-argocd
-  name: developer-argocd-subscription-1
-  namespace: gitops
+    app: developer-gitops
+  name: developer-gitops-subscription-1
+  namespace: developer-gitoips
 spec:
-  channel: ggithubcom-pittar-demos-acm-demo-ns/ggithubcom-pittar-demos-acm-demo
+  channel: channel-developer-gitops/developer-gitops
   placement:
     placementRef:
       kind: PlacementRule
-      name: developer-argocd-placement-1
+      name: developer-gitops-placement-1
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   labels:
-    app: developer-argocd
-  name: developer-argocd-placement-1
-  namespace: gitops
+    app: developer-gitops
+  name: developer-gitops-placement-1
+  namespace: developer-gitoips
 spec:
   clusterSelector:
     matchLabels:
