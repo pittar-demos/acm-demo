@@ -1,0 +1,62 @@
+apiVersion: v1                    
+kind: Namespace
+metadata:
+  name: gitops                             
+---
+apiVersion: app.k8s.io/v1beta1
+kind: Application
+metadata:
+  name: developer-argocd
+  namespace: gitops
+spec:
+  componentKinds:
+  - group: apps.open-cluster-management.io
+    kind: Subscription
+  descriptor: {}
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values: 
+          - developer-argocd
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Channel
+metadata:
+  annotations:
+    apps.open-cluster-management.io/reconcile-rate: high
+  name: ggithubcom-pittar-demos-acm-demo
+  namespace: ggithubcom-pittar-demos-acm-demo-ns
+spec:
+  type: Git
+  pathname: 'https://github.com/pittar-demos/acm-demo'
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: Subscription
+metadata:
+  annotations:
+    apps.open-cluster-management.io/git-branch: main
+    apps.open-cluster-management.io/git-path: gitops/openshift-gitops
+    apps.open-cluster-management.io/reconcile-option: merge
+  labels:
+    app: developer-argocd
+  name: developer-argocd-subscription-1
+  namespace: gitops
+spec:
+  channel: ggithubcom-pittar-demos-acm-demo-ns/ggithubcom-pittar-demos-acm-demo
+  placement:
+    placementRef:
+      kind: PlacementRule
+      name: developer-argocd-placement-1
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  labels:
+    app: developer-argocd
+  name: developer-argocd-placement-1
+  namespace: gitops
+spec:
+  clusterSelector:
+    matchLabels:
+      'developer-gitops': 'true'
