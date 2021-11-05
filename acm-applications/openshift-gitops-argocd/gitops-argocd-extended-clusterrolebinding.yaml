@@ -1,0 +1,12 @@
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: gitops-argocd-extended-clusterrolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: gitops-argocd-extended-clusterrole
+subjects:
+  - kind: ServiceAccount
+    name: argocd-argocd-application-controller
+    namespace: gitops
