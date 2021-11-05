@@ -9,4 +9,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: argocd-argocd-application-controller
-    namespace: gitops
+    namespace: developer-gitops
