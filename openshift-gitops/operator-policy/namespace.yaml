@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: Policy OpenShift GitOps Operator
+    openshift.io/display-name: Policy OpenShift GitOps Operator
+  name: policy-openshift-gitops-operator

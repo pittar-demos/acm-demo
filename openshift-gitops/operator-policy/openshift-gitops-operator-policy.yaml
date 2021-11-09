@@ -1,8 +1,8 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-openshift-gitops
-  namespace: policy-gitops
+  name: policy-gitops-operator
+  namespace: policy-openshift-gitops-operator
   annotations:
     policy.open-cluster-management.io/standards: DevOps
     policy.open-cluster-management.io/categories: GitOps
@@ -15,7 +15,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: policy-openshift-gitops-operator
+          name: policy-gitops-operator
         spec:
           remediationAction: inform
           severity: high
@@ -41,29 +41,29 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-openshift-gitops
-  namespace: policy-gitops
+  name: binding-policy-gitops-operator
+  namespace: policy-openshift-gitops-operator
 placementRef:
-  name: placement-policy-openshift-gitops
+  name: placement-policy-gitops-operator
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: policy-openshift-gitops
+  - name: policy-gitops-operator
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-openshift-gitops
-  namespace: policy-gitops
+  name: placement-policy-gitops-operator
+  namespace: policy-openshift-gitops-operator
 spec:
   clusterConditions:
     - status: 'True'
       type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - key: gitops
+      - key: devops-tools
         operator: In
         values:
           - "true"
