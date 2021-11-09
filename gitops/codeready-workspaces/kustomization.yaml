@@ -4,6 +4,4 @@ kind: Kustomization
 namespace: openshift-workspaces
 
 resources:
-  - crw-subscription.yaml
-  - crw-operatorgroup.yaml
   - crw-instance.yaml
