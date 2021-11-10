@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: OpenShift OAuth Policy
+    openshift.io/display-name: OpenShift OAuth Policy
+  name: policy-oauth

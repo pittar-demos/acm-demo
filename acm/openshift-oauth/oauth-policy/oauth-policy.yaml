@@ -1,0 +1,106 @@
+# This policy installs the Advanced Cluster Security Operator on the ACM hub
+# cluster and it create the Central Server.
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: policy-openshift-oauth
+  namespace: policy-oauth
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: oauth-htpasswd-secret
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: htpasswd-default-secret
+                namespace: openshift-config
+              data:
+                htpasswd: YWRtaW46JDJ5JDA1JC9aTnJha2VhTFVLY0NBSkVxcVV0SXVOQS5kZU1IWjIvZkszdWNmVFpFcGpmWjZWYlp2ZHMyCnVzZXIxOiQyeSQwNSRQa3FhektwbTZWOFZQaUVNNzNrSkt1WkJPUjVoMW1kNDRLU3A5MzA5VEtHelNaUlhpV2tUVwp1c2VyMjokMnkkMDUkS2lHS1RJUW5xak9KMWh0OGU0Tm1TLmQ1ZVBjWVBiSkN6YkFJU0xMa0FCcXl4M2VxUlJ3QU8KdXNlcjM6JDJ5JDA1JGdXYkZ3NjJZVU5ya3Njc0NDUGZiYy55dENWaGdJYVZiZXJZWHRRa1ZGOHVZcDhndFNVdmpPCnVzZXI0OiQyeSQwNSR2NVFIZmJGbHVFSUExeERsZDZrVUJleGEvTHE0OGhRai5wcUpIak1qNmtkejZiUGRkZVVoeQp1c2VyNTokMnkkMDUkZGNTbVFkNlZ1WS5FUll6emExVjQyLklIcW1FaVFBMkNXOVVBRFZBeVpMd2htZGJqc0pkWVcKdXNlcjY6JDJ5JDA1JGFBME5pQWFDcWRON0VnckszU0drNXVDS2F5OWZnZGhaSkhqVkI1T1EwYno3dXZ3MTlFc3dHCnVzZXI3OiQyeSQwNSRsaFpkSTA4RzVzVEdEdFo2d21IZEt1bnJ3RjhWZlpKN1lqOElpcVdCVS9oYUFRTDlaN2J6Qwp1c2VyODokMnkkMDUkdmZld04zWlNudjE1TjN3WXRyOGJidTZuejN6czhHNnM3VTBMSllGLkNLT3E4bUh6MlI1MlMKdXNlcjk6JDJ5JDA1JEZaMEJqTTk2TTdLN2ZoZDF4Y3h2Ny5WU0ovQTQ4RzhEQzN4eTkyYjRDYWZQZ0R2ODhHZW02CnVzZXIxMDokMnkkMDUkRTY4eXZnSDguQmZhV09IRFZENWNnZW9Hb0tlWFB2SkhjbU4uc1pOS3lFUmJPcWtNbnlZS20K
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: openshift-oauth-config
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: config.openshift.io/v1
+              kind: OAuth
+              metadata:
+                name: cluster
+              spec:
+                identityProviders:
+                - htpasswd:
+                    fileData:
+                      name: htpasswd-default-secret
+                  mappingMethod: claim
+                  name: default_htpasswd_provider
+                  type: HTPasswd
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: default-cluster-admins
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: ClusterRoleBinding
+              metadata:
+                name: default-cluster-admins
+              roleRef:
+                apiGroup: rbac.authorization.k8s.io
+                kind: ClusterRole
+                name: cluster-admin
+              subjects:
+              - apiGroup: rbac.authorization.k8s.io
+                kind: User
+                name: admin
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-openshift-oauth
+  namespace: policy-oauth
+placementRef:
+  name: placement-policy-openshift-oauth
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: policy-openshift-oauth
+  kind: Policy
+  apiGroup: policy.open-cluster-management.io
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-openshift-oauth
+  namespace: policy-oauth
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+      - {key: default-oauth, operator: In, values: ["true"]}
