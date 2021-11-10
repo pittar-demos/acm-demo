@@ -1,6 +1,11 @@
 apiVersion: v1                    
 kind: Namespace
 metadata:
+  name: openshift-workspaces
+---
+apiVersion: v1                    
+kind: Namespace
+metadata:
   name: channel-codeready-workspaces
 ---
 apiVersion: app.k8s.io/v1beta1
@@ -39,13 +44,13 @@ metadata:
   name: codeready-workspaces-subscription
   namespace: openshift-workspaces
   annotations:
-    apps.open-cluster-management.io/git-branch: ''
+    apps.open-cluster-management.io/git-branch: main
     apps.open-cluster-management.io/git-path: gitops/codeready-workspaces
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
     app: codeready-workspaces
 spec:
-  channel: channel-codeready-workspaces/channel-codeready-workspaces
+  channel: channel-codeready-workspaces/codeready-workspaces
   placement:
     placementRef:
       name: codeready-workspaces-placement
