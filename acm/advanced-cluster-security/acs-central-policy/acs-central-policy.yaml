@@ -101,6 +101,134 @@ spec:
                       minReplicas: 2
                       replicas: 2
                   scannerComponent: Enabled
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: acs-central-init-bundle-sa
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: v1
+              kind: ServiceAccount
+              metadata:
+                name: create-cluster-init
+                namespace: stackrox
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: ClusterRole
+              metadata:
+                name: create-cluster-init
+              rules:
+                - apiGroups:
+                  - app.k8s.io
+                  resources:
+                  - applications
+                  verbs:
+                  - '*'
+                - apiGroups:
+                  - apps.open-cluster-management.io
+                  resources:
+                  - '*'
+                  verbs:
+                  - '*'
+                - apiGroups:
+                  - ""
+                  resources:
+                  - configmaps
+                  - secrets
+                  - namespaces
+                  verbs:
+                  - '*'
+                - apiGroups:
+                    - route.openshift.io
+                  resources:
+                    - routes
+                  verbs:
+                    - get
+                    - list
+                - apiGroups:
+                    - platform.stackrox.io
+                  resources:
+                    - '*'
+                  verbs:
+                    - '*'
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: ClusterRoleBinding
+              metadata:
+                name: create-cluster-init
+              roleRef:
+                apiGroup: rbac.authorization.k8s.io
+                kind: ClusterRole
+                name: create-cluster-init
+              subjects:
+                - kind: ServiceAccount
+                  name: create-cluster-init
+                  namespace: stackrox
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: rbac.authorization.k8s.io/v1
+              kind: ClusterRoleBinding
+              metadata:
+                name: create-cluster-init-admin
+              roleRef:
+                apiGroup: rbac.authorization.k8s.io
+                kind: ClusterRole
+                name: cluster-admin
+              subjects:
+                - kind: ServiceAccount
+                  name: create-cluster-init
+                  namespace: stackrox
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: acs-central-init-bundle
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: batch/v1
+              kind: Job
+              metadata:
+                name: create-cluster-init-bundle
+                namespace: stackrox
+              spec:
+                template:
+                  spec:
+                    containers:
+                      - image: quay.io/pittar/acs-deploy-bundle-job:latest
+                        env:
+                        - name: PASSWORD
+                          valueFrom:
+                            secretKeyRef:
+                              name: central-htpasswd
+                              key: password
+                        command:
+                          - /bin/bash
+                          - -c
+                          - |
+                            #!/usr/bin/env bash
+
+                            oc project stackrox
+                            bash deploy-bundle.sh -i bundle.yaml
+
+                            echo "Complete"
+                        imagePullPolicy: Always
+                        name: create-acs-init-bundle
+                    dnsPolicy: ClusterFirst
+                    restartPolicy: Never
+                    serviceAccount: create-cluster-init
+                    serviceAccountName: create-cluster-init
+                    terminationGracePeriodSeconds: 30
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
