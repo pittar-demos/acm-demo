@@ -64,7 +64,7 @@ spec:
       type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - key: compliance
+      - key: vendor
         operator: In
         values:
-          - "cis"
+          - "OpenShift"
