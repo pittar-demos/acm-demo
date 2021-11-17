@@ -16,40 +16,7 @@ oc apply -k  acm/advanced-cluster-security/acs-central-policy
 
 After a few minutes, you should see that ACS is installed in the hub cluster.
 
-## 3. Manually create ACS init-bundle.
-
-### Download roxctl
-
-To login to the ACS Central you will need the generated admin password.  You can find this in the `stackrox` namespace in the `central-htpasswd` secret.  Login to Central with the username "admin" and the password from the secret.
-
-Once logged in, you can download the `roxctl` cli by clicking on the "CLI" icon at the top-right of the screen.
-
-### Create an Admin Token
-
-While logged into Central, navigate to "Platform Configuration" in the side navigation and select "Integrations".  Next, scroll to the bottom of the screen and select the "StackRox API Token" tile.
-
-Select "Generate Token", then:
-* Give your token a name (e.g. init-bundle-token)
-* Select the "Admin" role.
-* Generate the token.
-
-Copy the token and assign it to an enviornment variable on your machne called "ROX_API_TOKEN".  For example:
-
-```
-export ROX_API_TOKEN=<token>
-```
-
-### Generate the Init Bundle
-
-Generate the init-bundle by executing the following command.  It will use the `ROX_API_TOKEN` env var for authentication.  You should also be logged in to the cluster as a `cluster-admin` with the oc cli.
-
-```
-curl https://raw.githubusercontent.com/open-cluster-management/advanced-cluster-security/main/scripts/deploy-bundle.sh -o deploy-bundle.sh
-
-bash deploy-bundle.sh -i bundle.yaml | oc apply -f -
-```
-
-## 4. Deploy ACS "SecuredCluster" Sensors to All Clusters
+## 3. Deploy ACS "SecuredCluster" Sensors to All Clusters
 
 Run the following command to create the "SecuredCluster" policy that will join all spoke clusters to Central.
 
