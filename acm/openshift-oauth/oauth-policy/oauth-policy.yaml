@@ -25,7 +25,7 @@ spec:
               apiVersion: v1
               kind: Secret
               metadata:
-                name: htpasswd-default-secret
+                name: htpasswd-acm-secret
                 namespace: openshift-config
               data:
                 htpasswd: YWRtaW46JDJ5JDA1JC9aTnJha2VhTFVLY0NBSkVxcVV0SXVOQS5kZU1IWjIvZkszdWNmVFpFcGpmWjZWYlp2ZHMyCnVzZXIxOiQyeSQwNSRQa3FhektwbTZWOFZQaUVNNzNrSkt1WkJPUjVoMW1kNDRLU3A5MzA5VEtHelNaUlhpV2tUVwp1c2VyMjokMnkkMDUkS2lHS1RJUW5xak9KMWh0OGU0Tm1TLmQ1ZVBjWVBiSkN6YkFJU0xMa0FCcXl4M2VxUlJ3QU8KdXNlcjM6JDJ5JDA1JGdXYkZ3NjJZVU5ya3Njc0NDUGZiYy55dENWaGdJYVZiZXJZWHRRa1ZGOHVZcDhndFNVdmpPCnVzZXI0OiQyeSQwNSR2NVFIZmJGbHVFSUExeERsZDZrVUJleGEvTHE0OGhRai5wcUpIak1qNmtkejZiUGRkZVVoeQp1c2VyNTokMnkkMDUkZGNTbVFkNlZ1WS5FUll6emExVjQyLklIcW1FaVFBMkNXOVVBRFZBeVpMd2htZGJqc0pkWVcKdXNlcjY6JDJ5JDA1JGFBME5pQWFDcWRON0VnckszU0drNXVDS2F5OWZnZGhaSkhqVkI1T1EwYno3dXZ3MTlFc3dHCnVzZXI3OiQyeSQwNSRsaFpkSTA4RzVzVEdEdFo2d21IZEt1bnJ3RjhWZlpKN1lqOElpcVdCVS9oYUFRTDlaN2J6Qwp1c2VyODokMnkkMDUkdmZld04zWlNudjE1TjN3WXRyOGJidTZuejN6czhHNnM3VTBMSllGLkNLT3E4bUh6MlI1MlMKdXNlcjk6JDJ5JDA1JEZaMEJqTTk2TTdLN2ZoZDF4Y3h2Ny5WU0ovQTQ4RzhEQzN4eTkyYjRDYWZQZ0R2ODhHZW02CnVzZXIxMDokMnkkMDUkRTY4eXZnSDguQmZhV09IRFZENWNnZW9Hb0tlWFB2SkhjbU4uc1pOS3lFUmJPcWtNbnlZS20K
@@ -48,9 +48,9 @@ spec:
                 identityProviders:
                 - htpasswd:
                     fileData:
-                      name: htpasswd-default-secret
+                      name: htpasswd-acm-secret
                   mappingMethod: claim
-                  name: default_htpasswd_provider
+                  name: Managed Login
                   type: HTPasswd
   - objectDefinition:
       apiVersion: policy.open-cluster-management.io/v1

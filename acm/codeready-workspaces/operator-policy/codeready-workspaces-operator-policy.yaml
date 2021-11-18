@@ -15,7 +15,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: policy-crw-operator
+          name: policy-crw-operator-ns
         spec:
           remediationAction: inform
           severity: high
@@ -25,7 +25,16 @@ spec:
                 apiVersion: v1                    
                 kind: Namespace
                 metadata:
-                  name: openshift-workspaces     
+                  name: openshift-workspaces
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: policy-crw-operator
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: operators.coreos.com/v1alpha1

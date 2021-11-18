@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    openshift.io/description: Policy Compliance CIS Scan
-    openshift.io/display-name: Policy Compliance CIS Scan
-  name: policy-compliance-cis-scan

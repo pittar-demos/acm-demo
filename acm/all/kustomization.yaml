@@ -3,6 +3,8 @@ kind: Kustomization
 
 bases:
   - ../openshift-oauth
+  - ../compliance-operator
+  - ../advanced-cluster-security
   - ../openshift-pipelines
   - ../openshift-gitops
   - ../codeready-workspaces
