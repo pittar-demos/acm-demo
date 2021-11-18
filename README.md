@@ -1,33 +1,48 @@
 # ACM Demo
 
-## 1. Install ACM
+## Preparation
+
+### 1. Install ACM
 
 Log in to OpenShift as a cluster admin and navigate to OperatorHub.  Find and install Advanced Cluster Management for Kubernetes, accepting all defaults.
 
 Once the ACM Operator is installed, create a "MultiClusterHub" instance in the `open-cluster-management` project.  Again, accept all defaults.
 
-## 2. Install Advanced Cluster Security for Kubernetes (ACS)
+### 2. Create all the Policies and Applications
 
-Log in to OpenShift as a cluster admin using the `oc` cli.  Apply a policy that will instruct ACM to install ACS Central in the "hub" cluster.  YOu should see this policy in the "Governance" portion of ACM.  The policy might report as "Not compliant" until the operator has finished installing so that the `Central` CRD will be available in the cluster.
-
-```
-oc apply -k  acm/advanced-cluster-security/acs-central-policy
-```
-
-After a few minutes, you should see that ACS is installed in the hub cluster.
-
-## 3. Deploy ACS "SecuredCluster" Sensors to All Clusters
-
-Run the following command to create the "SecuredCluster" policy that will join all spoke clusters to Central.
-
-```
-oc apply -k acm/advanced-cluster-security/acs-securedcluster-policy
-```
-
-Once the policy is deployed, ACM will start rolling out "SecuredCluster" configuration to all spoke clusters.  A few minutes after that is done, you should notice all of your clusters reporting in the main ACS Central dashboard.
-
-## 5. Deploy All Other Policies / Apps
+You can apply each Policy and Application individually if you like, but it's easiest just to deploy them all in one shot:
 
 ```
 oc apply -k acm/all
 ```
+
+## What Gets Installed?
+
+The following Policies and Appications are created in your ACM hub.
+
+### Advanced Cluster Security for Kubernetes
+
+**policy-advanced-cluster-security-operator:** This policy will deploy [Advanced Cluster Security for Kubernetes](https://www.redhat.com/en/technologies/cloud-computing/openshift/advanced-cluster-security-kubernetes) Central to your Hub cluster.  It also generates an *init-bundle* along with ACM *channel/subscription/placementrule* resources to copy the init-bundle to all spoke clusters automatically.
+
+**policy-acs-securedcluster:** Deploys the *SecuredCluster* resources to all clusters - automatically joining them to the ACS Central that is deployed on the Hub cluster.
+
+### Compliance Operator and CIS Scan
+
+**policy-compliance-operator:** Deploys the [Compliance Operator](https://docs.openshift.com/container-platform/4.9/security/compliance_operator/compliance-operator-understanding.html) to all clusters and runs OpenShift CIS scans.
+
+Advanced Cluster Security will pick up the scan results and report them in ACS Central.
+
+### DevOps Tools
+
+**policy-gitops-operator:** This policy will install the [OpenShift GitOps](https://docs.openshift.com/container-platform/4.9/cicd/gitops/understanding-openshift-gitops.html) operator *without* the default Argo CD instance in the `openshift-gitops` namespace.  The reason for this is ACM will be managing the cluster state, so the "admin" instance of Argo CD is not required.
+
+This policy is applied to any cluster with the `devops-tools=true` label.
+
+**developer-gitops (Application):** This "Application" will deploy a "developer" instance of Argo CD to a namespapce called `developer-gitops`.  It will be automatically configured to use OpenShift OAuth for authentication.
+
+This Applicaiton is deployed to any cluster with both `developer-gitops=true` and `devops-tools=true` labels.
+
+**policy-pipelines-operator:** This policy deploys [OpenShift Pipelines](https://docs.openshift.com/container-platform/4.9/cicd/pipelines/understanding-openshift-pipelines.html) to any cluster with the `devops-tools=true` label.
+
+**policy-codeready-workspaces:** 
+
