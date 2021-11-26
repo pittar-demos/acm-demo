@@ -45,4 +45,4 @@ This Applicaiton is deployed to any cluster with both `developer-gitops=true` an
 **policy-pipelines-operator:** This policy deploys [OpenShift Pipelines](https://docs.openshift.com/container-platform/4.9/cicd/pipelines/understanding-openshift-pipelines.html) to any cluster with the `devops-tools=true` label.
 
 **policy-codeready-workspaces:** 
-
+This policy deploys the [CodeReady Workspaces]() operator to any cluster with the `devops-tools=true` label.
