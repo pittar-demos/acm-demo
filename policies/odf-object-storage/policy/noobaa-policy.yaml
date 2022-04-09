@@ -1,8 +1,8 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-object-storage
-  namespace: policy-object-storage
+  name: object-storage
+  namespace: object-storage
   annotations:
     policy.open-cluster-management.io/standards: Storage
     policy.open-cluster-management.io/categories: Object
@@ -45,7 +45,7 @@ spec:
                 name: ocs-operator
                 namespace: openshift-storage
               spec:
-                channel: stable-4.8
+                channel: stable-4.9
                 installPlanApproval: Automatic
                 name: ocs-operator
                 source: redhat-operators
@@ -142,26 +142,26 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-object-storage
-  namespace: policy-object-storage
+  name: binding-object-storage
+  namespace: object-storage
 placementRef:
-  name: placement-policy-object-storage
+  name: placement-object-storage
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-- name: policy-object-storage
+- name: object-storage
   kind: Policy
   apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-object-storage
-  namespace: policy-object-storage
+  name: placement-object-storage
+  namespace: object-storage
 spec:
   clusterConditions:
   - status: "True"
     type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - {key: object-storage, operator: In, values: ["true"]}
+      - {key: local-cluster, operator: In, values: ["true"]}

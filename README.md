@@ -4,9 +4,32 @@
 
 ### 1. Install ACM
 
+#### Using OperatorHub
+
 Log in to OpenShift as a cluster admin and navigate to OperatorHub.  Find and install Advanced Cluster Management for Kubernetes, accepting all defaults.
 
 Once the ACM Operator is installed, create a "MultiClusterHub" instance in the `open-cluster-management` project.  Again, accept all defaults.
+
+#### Using OC
+
+Run the following command to install the operator:
+
+```
+oc apply -k https://github.com/redhat-cop/gitops-catalog/advanced-cluster-management/operator/overlays/release-2.4
+```
+
+Once the operator is installed, run this command to install the ACM Hub:
+
+```
+oc apply -k https://github.com/redhat-cop/gitops-catalog/advanced-cluster-management/instance/base
+```
+
+If you get an error message such as the following, then you probably tried to run the 2nd command before the operator was fully installed.  Wait a moment and try again.
+
+```
+... no matches for kind "MultiClusterHub" in version "operator.open-cluster-management.io/v1"
+```
+
 
 ### 2. Create all the Policies and Applications
 

@@ -1,5 +1,6 @@
 # This policy installs the Advanced Cluster Management Observability functionality
 # on the Hub cluster.
+# Based on https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/observability/observing-environments-intro#persistent-stores-observability
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
