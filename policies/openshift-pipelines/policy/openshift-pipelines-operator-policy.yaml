@@ -1,8 +1,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-pipelines-operator
-  namespace: policy-pipelines-operator
+  name: pipelines-operator
   annotations:
     policy.open-cluster-management.io/standards: DevOps
     policy.open-cluster-management.io/categories: CI/CD Tools
@@ -15,7 +14,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: policy-pipelines-operator
+          name: pipelines-operator
         spec:
           remediationAction: inform
           severity: high
@@ -37,29 +36,28 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-pipelines-operator
-  namespace: policy-pipelines-operator
+  name: binding-pipelines-operator
 placementRef:
-  name: placement-policy-pipelines-operator
+  name: placement-pipelines-operator
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: policy-pipelines-operator
+  - name: pipelines-operator
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-pipelines-operator
-  namespace: policy-pipelines-operator
+  name: placement-pipelines-operator
 spec:
   clusterConditions:
     - status: 'True'
       type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - key: devops-tools
+      - key: demo
         operator: In
         values:
-          - "true"
+          - "devops"
+          - "all"

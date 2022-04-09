@@ -10,6 +10,6 @@ bases:
   - acm-observability
   - advanced-cluster-security
   - compliance-operator
-  # - ../openshift-pipelines
+  - openshift-pipelines
   # - ../openshift-gitops
   # - ../codeready-workspaces
