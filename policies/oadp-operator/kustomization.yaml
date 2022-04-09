@@ -4,3 +4,4 @@ kind: Kustomization
 bases:
   - operator-policy
   - backup-bucket-policy
+  - hub-dpa-policy

@@ -1,0 +1,81 @@
+# This policy installs the Advanced Cluster Management Observability functionality
+# on the Hub cluster.
+# Based on https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/observability/observing-environments-intro#persistent-stores-observability
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: hub-dataprotectionapplication
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: Disaster Recovery
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: hub-dataprotectionapplication
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: oadp.openshift.io/v1alpha1
+              kind: DataProtectionApplication
+              metadata:
+                name: default-dpa
+                namespace: openshift-adp
+              spec:
+                configuration:
+                  velero:
+                    featureFlags:
+                      - EnableCSI
+                    defaultPlugins:
+                    - openshift
+                    - aws
+                    - csi
+                backupLocations:
+                  - velero:
+                      default: true
+                      provider: aws
+                      credential:
+                          name: cloud-credentials
+                          key: cloud
+                      objectStorage:
+                          bucket: {{ fromConfigMap "openshift-adp" "backup-bucket" "BUCKET_NAME" }}
+                          prefix: velero
+                      config:
+                          insecureSkipTLSVerify: "true"
+                          profile: default
+                          region: "noobaa"
+                          s3ForcePathStyle: "true"
+                          s3Url: http://{{ fromConfigMap "openshift-adp" "backup-bucket" "BUCKET_HOST" }}
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-hub-dataprotectionapplication
+placementRef:
+  name: placement-hub-dataprotectionapplication
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: hub-dataprotectionapplication
+  kind: Policy
+  apiGroup: policy.open-cluster-management.io
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-hub-dataprotectionapplication
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+      - {key: local-cluster, operator: In, values: ["true"]}
