@@ -5,12 +5,11 @@ namespace: acm-custom-policies
 
 bases:
   - custom-policies-namespace
+  - openshift-oauth
   - odf-object-storage
   - acm-observability
   - advanced-cluster-security
-  # - ../openshift-oauth
-  # - ../compliance-operator
-  # - ../advanced-cluster-security
+  - compliance-operator
   # - ../openshift-pipelines
   # - ../openshift-gitops
   # - ../codeready-workspaces
