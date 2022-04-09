@@ -4,8 +4,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-acm-observability-operator
-  namespace: policy-acm-observability
+  name: acm-observability-operator
   annotations:
     policy.open-cluster-management.io/standards: NIST SP 800-53
     policy.open-cluster-management.io/categories: CM Configuration Management
@@ -122,20 +121,20 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-acm-observability-operator
+  name: binding-acm-observability-operator
 placementRef:
-  name: placement-policy-acm-observability-operator
+  name: placement-acm-observability-operator
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-- name: policy-acm-observability-operator
+- name: acm-observability-operator
   kind: Policy
   apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-acm-observability-operator
+  name: placement-acm-observability-operator
 spec:
   clusterConditions:
   - status: "True"

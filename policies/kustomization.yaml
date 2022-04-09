@@ -4,6 +4,7 @@ kind: Kustomization
 bases:
   - custom-policies-namespace
   - odf-object-storage
+  - acm-observability
   # - ../openshift-oauth
   # - ../compliance-operator
   # - ../advanced-cluster-security
