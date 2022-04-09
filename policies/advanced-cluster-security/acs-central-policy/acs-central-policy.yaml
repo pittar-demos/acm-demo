@@ -3,8 +3,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-advanced-cluster-security-operator
-  namespace: policy-acs-central
+  name: advanced-cluster-security-operator
   annotations:
     policy.open-cluster-management.io/standards: NIST SP 800-53
     policy.open-cluster-management.io/categories: CM Configuration Management
@@ -233,20 +232,20 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-advanced-cluster-security-operator
+  name: binding-advanced-cluster-security-operator
 placementRef:
-  name: placement-policy-advanced-cluster-security-operator
+  name: placement-advanced-cluster-security-operator
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-- name: policy-advanced-cluster-security-operator
+- name: advanced-cluster-security-operator
   kind: Policy
   apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-advanced-cluster-security-operator
+  name: placement-advanced-cluster-security-operator
 spec:
   clusterConditions:
   - status: "True"

@@ -11,8 +11,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-acs-sensor
-  namespace: policy-acs-securedcluster
+  name: acs-sensor
   annotations:
     policy.open-cluster-management.io/standards: NIST SP 800-53
     policy.open-cluster-management.io/categories: CM Configuration Management
@@ -94,20 +93,20 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-acs-sensor
+  name: binding-acs-sensor
 placementRef:
-  name: placement-policy-acs-sensor
+  name: placement-acs-sensor
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-- name: policy-acs-sensor
+- name: acs-sensor
   kind: Policy
   apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-acs-sensor
+  name: placement-acs-sensor
 spec:
   clusterConditions:
   - status: "True"
