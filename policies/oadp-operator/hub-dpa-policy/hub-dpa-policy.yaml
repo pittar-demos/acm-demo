@@ -32,6 +32,8 @@ spec:
               spec:
                 configuration:
                   velero:
+                    restic:
+                      enable: true
                     featureFlags:
                       - EnableCSI
                     defaultPlugins:
@@ -46,7 +48,7 @@ spec:
                           name: cloud-credentials
                           key: cloud
                       objectStorage:
-                          bucket: {{ fromConfigMap "openshift-adp" "backup-bucket" "BUCKET_NAME" }}
+                          bucket: '{{ fromConfigMap "openshift-adp" "backup-bucket" "BUCKET_NAME" }}'
                           prefix: velero
                       config:
                           insecureSkipTLSVerify: "true"
