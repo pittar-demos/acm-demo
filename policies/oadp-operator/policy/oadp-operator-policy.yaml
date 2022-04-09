@@ -1,0 +1,89 @@
+# This policy installs the Advanced Cluster Management Observability functionality
+# on the Hub cluster.
+# Based on https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/observability/observing-environments-intro#persistent-stores-observability
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: oadp-operator
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: Disaster Recovery
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: oadp-operator-namespace
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                labels:
+                  openshift.io/cluster-monitoring: "true"
+                name: openshift-adp
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: oadp-operator
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: operators.coreos.com/v1alpha1
+              kind: Subscription
+              metadata:
+                name: redhat-oadp-operator
+                namespace: openshift-adp
+              spec:
+                channel: stable
+                installPlanApproval: Automatic
+                name: redhat-oadp-operator
+                source: redhat-operators
+                sourceNamespace: openshift-marketplace
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: operators.coreos.com/v1
+              kind: OperatorGroup
+              metadata:
+                name: openshift-adp-vg4t7
+                namespace: openshift-adp
+              spec:
+                targetNamespaces:
+                  - openshift-adp
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-oadp-operator
+placementRef:
+  name: placement-oadp-operator
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: oadp-operator
+  kind: Policy
+  apiGroup: policy.open-cluster-management.io
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-oadp-operator
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+      - {key: vendor, operator: In, values: ["OpenShift"]}

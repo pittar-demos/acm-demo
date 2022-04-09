@@ -11,5 +11,6 @@ bases:
   - advanced-cluster-security
   - compliance-operator
   - openshift-pipelines
+  - oadp-operator
   # - ../openshift-gitops
   # - ../codeready-workspaces
