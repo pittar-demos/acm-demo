@@ -1,8 +1,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-compliance-operator
-  namespace: policy-openshift-compliance-operator
+  name: compliance-operator
   annotations:
     policy.open-cluster-management.io/standards: NIST-CSF
     policy.open-cluster-management.io/categories: PR.IP Information Protection Processes and Procedures
@@ -15,7 +14,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: policy-compliance-operator-ns
+          name: compliance-operator-ns
         spec:
           remediationAction: inform
           severity: high
@@ -30,7 +29,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: policy-compliance-operator
+          name: compliance-operator
         spec:
           remediationAction: inform
           severity: high
@@ -89,22 +88,20 @@ spec:
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-compliance-operator
-  namespace: policy-openshift-compliance-operator
+  name: binding-compliance-operator
 placementRef:
-  name: placement-policy-compliance-operator
+  name: placement-compliance-operator
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-  - name: policy-compliance-operator
+  - name: compliance-operator
     kind: Policy
     apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-compliance-operator
-  namespace: policy-openshift-compliance-operator
+  name: placement-compliance-operator
 spec:
   clusterConditions:
     - status: 'True'

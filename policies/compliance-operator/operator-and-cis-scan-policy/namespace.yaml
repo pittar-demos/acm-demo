@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  annotations:
-    openshift.io/description: Policy OpenShift Compliance Operator
-    openshift.io/display-name: Policy OpenShift Compliance Operator
-  name: policy-openshift-compliance-operator
