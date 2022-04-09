@@ -37,9 +37,9 @@ spec:
                     featureFlags:
                       - EnableCSI
                     defaultPlugins:
-                    - openshift
-                    - aws
-                    - csi
+                      - openshift
+                      - aws
+                      - csi
                 backupLocations:
                   - velero:
                       default: true
