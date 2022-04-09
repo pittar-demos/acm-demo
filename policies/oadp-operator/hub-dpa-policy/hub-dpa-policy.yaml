@@ -31,9 +31,9 @@ spec:
                 namespace: openshift-adp
               spec:
                 configuration:
+                  restic:
+                    enable: true
                   velero:
-                    restic:
-                      enable: true
                     featureFlags:
                       - EnableCSI
                     defaultPlugins:
