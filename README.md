@@ -30,6 +30,13 @@ If you get an error message such as the following, then you probably tried to ru
 ... no matches for kind "MultiClusterHub" in version "operator.open-cluster-management.io/v1"
 ```
 
+### 2. Load up ACM!
+
+Create the "demo-setup" Application to load up ACM with all of the policies and applications in this repository.
+
+```
+oc apply -k 
+```
 
 ### 2. Create all the Policies and Applications
 

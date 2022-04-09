@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  annotations:
+    openshift.io/description: ACM cutom policies.
+    openshift.io/display-name: ACM Custom Policies
+  name: acm-custom-policies

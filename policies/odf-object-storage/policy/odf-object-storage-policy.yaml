@@ -2,7 +2,6 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: object-storage
-  namespace: object-storage
   annotations:
     policy.open-cluster-management.io/standards: Storage
     policy.open-cluster-management.io/categories: Object
@@ -143,7 +142,6 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
   name: binding-object-storage
-  namespace: object-storage
 placementRef:
   name: placement-object-storage
   kind: PlacementRule
@@ -157,7 +155,6 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   name: placement-object-storage
-  namespace: object-storage
 spec:
   clusterConditions:
   - status: "True"
