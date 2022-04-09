@@ -60,4 +60,5 @@ spec:
         operator: In
         values:
           - "devops"
+          - "security"
           - "all"
