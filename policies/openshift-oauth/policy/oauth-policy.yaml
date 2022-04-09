@@ -98,4 +98,4 @@ spec:
     type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - {key: default-oauth, operator: In, values: ["true"]}
+      - {key: vendor, operator: In, values: ["OpenShift"]}
