@@ -1,0 +1,83 @@
+# This policy installs the Advanced Cluster Management Observability functionality
+# on the Hub cluster.
+# Based on https://access.redhat.com/documentation/en-us/red_hat_advanced_cluster_management_for_kubernetes/2.4/html/observability/observing-environments-intro#persistent-stores-observability
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: oadp-backup-bucket
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: Disaster Recovery
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: oadp-backup-bucket
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: objectbucket.io/v1alpha1
+              kind: ObjectBucketClaim
+              metadata:
+                name: backup-bucket
+                namespace: openshift-adp
+              spec:
+                additionalConfig:
+                  bucketclass: noobaa-default-bucket-class
+                generateBucketName: acm-object-storage
+                storageClassName: openshift-storage.noobaa.io
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: oadp-bsl-credentials
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: cloud-credentials
+                namespace: openshift-adp
+              type: Opaque
+              stringData:
+                cloud: |
+                  [default]
+                  aws_access_key_id={{ fromSecret "openshift-adp" "backup-bucket" "AWS_ACCESS_KEY_ID" | base64dec }}
+                  aws_secret_access_key={{ fromSecret "openshift-adp" "backup-bucket" "AWS_SECRET_ACCESS_KEY" | base64dec }}
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-oadp-backup-bucket
+placementRef:
+  name: placement-oadp-backup-bucket
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+- name: oadp-backup-bucket
+  kind: Policy
+  apiGroup: policy.open-cluster-management.io
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-oadp-backup-bucket
+spec:
+  clusterConditions:
+  - status: "True"
+    type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+      - {key: local-cluster, operator: In, values: ["true"]}
