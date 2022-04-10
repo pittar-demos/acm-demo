@@ -1,8 +1,7 @@
 apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
-  name: policy-quay
-  namespace: policy-quay
+  name: quay-registry
   annotations:
     policy.open-cluster-management.io/standards: DevOps
     policy.open-cluster-management.io/categories: Image Registry
@@ -61,6 +60,15 @@ spec:
         object-templates:
           - complianceType: musthave
             objectDefinition:
+              apiVersion: v1
+              kind: Secret
+              metadata:
+                name: init-config-bundle-secret
+                namespace: quay
+              data:
+                config.yaml: U1VQRVJfVVNFUlM6Ci0gcXVheWFkbWluCkZFQVRVUkVfVVNFUl9DUkVBVElPTjogdHJ1ZQo=
+          - complianceType: musthave
+            objectDefinition:
               apiVersion: quay.redhat.com/v1
               kind: QuayRegistry
               metadata:
@@ -72,26 +80,25 @@ spec:
                     managed: true
                   - managed: true
                     kind: tls
+                configBundleSecret: init-config-bundle-secret
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
-  name: binding-policy-quay
-  namespace: policy-quay
+  name: binding-quay-registry
 placementRef:
-  name: placement-policy-quay
+  name: placement-quay-registry
   kind: PlacementRule
   apiGroup: apps.open-cluster-management.io
 subjects:
-- name: policy-quay
+- name: quay-registry
   kind: Policy
   apiGroup: policy.open-cluster-management.io
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
-  name: placement-policy-quay
-  namespace: policy-quay
+  name: placement-quay-registry
 spec:
   clusterConditions:
   - status: "True"
