@@ -12,6 +12,6 @@ bases:
   - compliance-operator
   - openshift-pipelines
   - oadp-operator
-  - quay-regsistry
+  - quay-registry
   # - ../openshift-gitops
   # - ../codeready-workspaces
