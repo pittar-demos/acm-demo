@@ -35,6 +35,10 @@ If you get an error message such as the following, then you probably tried to ru
 Create the "demo-setup" Application to load up ACM with all of the policies and applications in this repository.
 
 ```
+
+```
+
+```
 oc apply -k applications/demo-setup
 ```
 

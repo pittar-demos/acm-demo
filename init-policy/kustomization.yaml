@@ -4,4 +4,5 @@ kind: Kustomization
 namespace: acm-init-policies
 
 resources:
-  - compliance-operator-policy.yaml
+  - namespace.yaml
+  - init-policy.yaml
