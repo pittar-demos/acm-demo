@@ -30,25 +30,21 @@ If you get an error message such as the following, then you probably tried to ru
 ... no matches for kind "MultiClusterHub" in version "operator.open-cluster-management.io/v1"
 ```
 
+And update RBAC:
+
+```
+oc apply -k init-manifests
+```
+
 ### 2. Load up ACM!
 
-Create the "demo-setup" Application to load up ACM with all of the policies and applications in this repository.
+Create the "init-application" Application to load up ACM with all of the policies and applications in this repository.
 
 ```
-oc apply -k init-policy
-```
-
-```
-oc apply -k applications/demo-setup
+oc apply -k init-application
 ```
 
 ### 2. Create all the Policies and Applications
-
-You can apply each Policy and Application individually if you like, but it's easiest just to deploy them all in one shot:
-
-```
-oc apply -k acm/all
-```
 
 ## What Gets Installed?
 
@@ -60,9 +56,9 @@ The following Policies and Appications are created in your ACM hub.
 
 **policy-acs-securedcluster:** Deploys the *SecuredCluster* resources to all clusters - automatically joining them to the ACS Central that is deployed on the Hub cluster.
 
-### Compliance Operator and CIS Scan
+### Compliance Operator and Moderate Scan (NIST-800-53)
 
-**policy-compliance-operator:** Deploys the [Compliance Operator](https://docs.openshift.com/container-platform/4.9/security/compliance_operator/compliance-operator-understanding.html) to all clusters and runs OpenShift CIS scans.
+**policy-compliance-operator:** Deploys the [Compliance Operator](https://docs.openshift.com/container-platform/4.9/security/compliance_operator/compliance-operator-understanding.html) to all clusters and runs OpenShift Moderate (NIST-800-53) scans.
 
 Advanced Cluster Security will pick up the scan results and report them in ACS Central.
 
