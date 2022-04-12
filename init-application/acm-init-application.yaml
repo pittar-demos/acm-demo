@@ -1,18 +1,18 @@
 apiVersion: v1                    
 kind: Namespace
 metadata:
-  name: demo-setup                             
+  name: application-acm-init                             
 ---
 apiVersion: v1                    
 kind: Namespace
 metadata:
-  name: channel-demo-setup                             
+  name: channel-acm-init                             
 ---
 apiVersion: app.k8s.io/v1beta1
 kind: Application
 metadata:
-  name: demo-setup
-  namespace: demo-setup
+  name: acm-init
+  namespace: application-acm-init
 spec:
   componentKinds:
   - group: apps.open-cluster-management.io
@@ -23,15 +23,15 @@ spec:
       - key: app
         operator: In
         values: 
-          - demo-setup
+          - acm-init
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: Channel
 metadata:
   annotations:
     apps.open-cluster-management.io/reconcile-rate: high
-  name: demo-setup
-  namespace: channel-demo-setup
+  name: acm-init
+  namespace: channel-acm-init
 spec:
   type: Git
   pathname: 'https://github.com/pittar-demos/acm-demo'
@@ -41,26 +41,26 @@ kind: Subscription
 metadata:
   annotations:
     apps.open-cluster-management.io/git-branch: main
-    apps.open-cluster-management.io/git-path: gitops/demo-setup
+    apps.open-cluster-management.io/git-path: gitops/acm-init
     apps.open-cluster-management.io/reconcile-option: merge
   labels:
-    app: demo-setup
-  name: demo-setup-subscription
-  namespace: demo-setup
+    app: acm-init
+  name: acm-init-subscription
+  namespace: application-acm-init
 spec:
-  channel: channel-demo-setup/demo-setup
+  channel: channel-acm-init/acm-init
   placement:
     placementRef:
       kind: PlacementRule
-      name: demo-setup-placement
+      name: acm-init-placement
 ---
 apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   labels:
-    app: demo-setup
-  name: demo-setup-placement
-  namespace: demo-setup
+    app: acm-init
+  name: acm-init-placement
+  namespace: application-acm-init
 spec:
   clusterSelector:
     matchLabels:
