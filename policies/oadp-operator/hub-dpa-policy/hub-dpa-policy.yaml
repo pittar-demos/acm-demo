@@ -56,12 +56,12 @@ spec:
                           region: "noobaa"
                           s3ForcePathStyle: "true"
                           s3Url: http://{{ fromConfigMap "openshift-adp" "backup-bucket" "BUCKET_HOST" }}
-                snapshotLocations:
-                  - velero:
-                      config:
-                        profile: default
-                        region: "noobaa"
-                      provider: aws
+                #snapshotLocations:
+                #  - velero:
+                #      config:
+                #        profile: default
+                #        region: "noobaa"
+                #      provider: aws
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
