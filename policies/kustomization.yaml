@@ -8,7 +8,7 @@ bases:
   - openshift-oauth
   - odf-object-storage
   - acm-observability
-  - advanced-cluster-security
+  #- advanced-cluster-security
   - compliance-operator
   - openshift-pipelines
   - oadp-operator
