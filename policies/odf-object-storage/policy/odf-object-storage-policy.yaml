@@ -162,5 +162,3 @@ spec:
   clusterSelector:
     matchExpressions:
       - {key: local-cluster, operator: In, values: ["true"]}
-      - {key: quay, operator: In, values: ["true"]}
-      - {key: acm-observability, operator: In, values: ["true"]}
