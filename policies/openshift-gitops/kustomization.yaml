@@ -3,4 +3,4 @@ kind: Kustomization
 
 bases:
   - operator-policy
-  - application
+  #- application
