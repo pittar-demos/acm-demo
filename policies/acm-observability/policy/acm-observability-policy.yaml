@@ -141,4 +141,4 @@ spec:
     type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - {key: local-cluster, operator: In, values: ["true"]}
+      - {key: acm-observability, operator: In, values: ["true"]}

@@ -32,7 +32,7 @@ spec:
               spec:
                 additionalConfig:
                   bucketclass: noobaa-default-bucket-class
-                generateBucketName: acm-object-storage
+                generateBucketName: oadp-object-storage
                 storageClassName: openshift-storage.noobaa.io
   - objectDefinition:
       apiVersion: policy.open-cluster-management.io/v1

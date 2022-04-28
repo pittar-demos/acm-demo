@@ -44,7 +44,7 @@ spec:
                 name: ocs-operator
                 namespace: openshift-storage
               spec:
-                channel: stable-4.9
+                channel: stable-4.10
                 installPlanApproval: Automatic
                 name: ocs-operator
                 source: redhat-operators
@@ -162,3 +162,5 @@ spec:
   clusterSelector:
     matchExpressions:
       - {key: local-cluster, operator: In, values: ["true"]}
+      - {key: quay, operator: In, values: ["true"]}
+      - {key: acm-observability, operator: In, values: ["true"]}
