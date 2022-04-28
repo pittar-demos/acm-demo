@@ -2,7 +2,6 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: Policy
 metadata:
   name: policy-gitops-operator
-  namespace: policy-openshift-gitops-operator
   annotations:
     policy.open-cluster-management.io/standards: DevOps
     policy.open-cluster-management.io/categories: GitOps
@@ -42,7 +41,6 @@ apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
 metadata:
   name: binding-policy-gitops-operator
-  namespace: policy-openshift-gitops-operator
 placementRef:
   name: placement-policy-gitops-operator
   kind: PlacementRule
@@ -56,7 +54,6 @@ apiVersion: apps.open-cluster-management.io/v1
 kind: PlacementRule
 metadata:
   name: placement-policy-gitops-operator
-  namespace: policy-openshift-gitops-operator
 spec:
   clusterConditions:
     - status: 'True'
