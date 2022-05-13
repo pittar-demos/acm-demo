@@ -14,7 +14,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: compliance-operator-ns
+          name: mtc-operator-ns
         spec:
           remediationAction: inform
           severity: high
@@ -29,7 +29,7 @@ spec:
         apiVersion: policy.open-cluster-management.io/v1
         kind: ConfigurationPolicy
         metadata:
-          name: compliance-operator
+          name: mtc-operator
         spec:
           remediationAction: inform
           severity: high
