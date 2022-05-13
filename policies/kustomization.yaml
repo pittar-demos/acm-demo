@@ -4,14 +4,15 @@ kind: Kustomization
 namespace: acm-custom-policies
 
 bases:
-  - custom-policies-namespace
-  - openshift-oauth
-  - odf-object-storage
   - acm-observability
   - advanced-cluster-security
   - compliance-operator
-  - openshift-pipelines
+  - custom-policies-namespace
+  - migration-toolkit-containers
+  - odf-object-storage
   - oadp-operator
-  - quay-registry
+  - openshift-oauth
   #- openshift-gitops
+  - openshift-pipelines
+  - quay-registry
   #- codeready-workspaces

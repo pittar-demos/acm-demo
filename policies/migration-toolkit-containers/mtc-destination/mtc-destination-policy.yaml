@@ -1,0 +1,58 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: mtc-instance-destination
+  annotations:
+    policy.open-cluster-management.io/standards: Migration
+    policy.open-cluster-management.io/categories: Applications
+    policy.open-cluster-management.io/controls: Migration Toolkit for Containers
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: migration.openshift.io/v1alpha1
+        kind: MigrationController
+        metadata:
+          name: migration-controller
+          namespace: openshift-migration
+        spec:
+          cluster_name: destination
+          mig_namespace_limit: "10"
+          mig_pod_limit: "100"
+          mig_pv_limit: "100"
+          migration_controller: true
+          migration_log_reader: true
+          migration_ui: true
+          migration_velero: true
+          olm_managed: true
+          restic_timeout: 1h
+          version: 1.7.1
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-mtc-instance-destination
+placementRef:
+  name: placement-mtc-instance-destination
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+  - name: mtc-instance-destination
+    kind: Policy
+    apiGroup: policy.open-cluster-management.io
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-mtc-instance-destination
+spec:
+  clusterConditions:
+    - status: 'True'
+      type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+      - key: mtc-demo
+        operator: In
+        values:
+          - "destination"

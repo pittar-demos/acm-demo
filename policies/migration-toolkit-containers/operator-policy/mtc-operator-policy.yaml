@@ -1,0 +1,100 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: mtc-operator
+  annotations:
+    policy.open-cluster-management.io/standards: Migration
+    policy.open-cluster-management.io/categories: Applications
+    policy.open-cluster-management.io/controls: Migration Toolkit for Containers
+spec:
+  remediationAction: enforce
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: compliance-operator-ns
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1                    
+                kind: Namespace
+                metadata:
+                  name: openshift-compliance
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: compliance-operator
+        spec:
+          remediationAction: inform
+          severity: high
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: Subscription
+                metadata:
+                  name: mtc-operator
+                  namespace: openshift-migration
+                spec:
+                  channel: release-v1.7
+                  installPlanApproval: Automatic
+                  name: mtc-operator
+                  source: redhat-operators
+                  sourceNamespace: openshift-marketplace
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1alpha1
+                kind: Subscription
+                metadata:
+                  name: redhat-oadp-operator-stable-1.0-redhat-operators-openshift-marketplace
+                  namespace: openshift-migration
+                spec:
+                  channel: stable-1.0
+                  installPlanApproval: Automatic
+                  name: redhat-oadp-operator
+                  source: redhat-operators
+                  sourceNamespace: openshift-marketplace
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: operators.coreos.com/v1
+                kind: OperatorGroup
+                metadata:
+                  name: openshift-migration
+                  namespace: openshift-migration
+                spec:
+                  targetNamespaces:
+                    - openshift-migration
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-mtc-operator
+placementRef:
+  name: placement-mtc-operator
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+  - name: mtc-operator
+    kind: Policy
+    apiGroup: policy.open-cluster-management.io
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-mtc-operator
+spec:
+  clusterConditions:
+    - status: 'True'
+      type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+      - key: demo
+        operator: In
+        values:
+          - "mtc"
