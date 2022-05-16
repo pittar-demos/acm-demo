@@ -165,8 +165,14 @@ spec:
         operator: In
         values:
           - "true"
+      - key: odfVersion
+        operator: In
+        values:
+          - "4.9"
       - key: demo
         operator: In
         values:
           - "acm-observability"
           - "quay"
+          - "mtc"
+
