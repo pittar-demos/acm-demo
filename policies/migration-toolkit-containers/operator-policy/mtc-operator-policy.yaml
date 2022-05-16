@@ -97,7 +97,8 @@ spec:
       type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - key: demo
+      - key: mtc-demo
         operator: In
         values:
-          - "mtc"
+          - "source"
+          - "destination"
