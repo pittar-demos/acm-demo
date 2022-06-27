@@ -44,7 +44,7 @@ spec:
                 name: quay-operator
                 namespace: openshift-operators
               spec:
-                channel: stable-3.6
+                channel: stable-3.7
                 installPlanApproval: Automatic
                 name: quay-operator
                 source: redhat-operators
@@ -66,7 +66,7 @@ spec:
                 name: init-config-bundle-secret
                 namespace: quay
               data:
-                config.yaml: U1VQRVJfVVNFUlM6Ci0gcXVheWFkbWluCkZFQVRVUkVfVVNFUl9DUkVBVElPTjogdHJ1ZQo=
+                config.yaml: U1VQRVJfVVNFUlM6Ci0gcXVheWFkbWluCkZFQVRVUkVfVVNFUl9DUkVBVElPTjogdHJ1ZQpGRUFUVVJFX1BST1hZX0NBQ0hFOiB0cnVlCg==
           - complianceType: musthave
             objectDefinition:
               apiVersion: quay.redhat.com/v1
