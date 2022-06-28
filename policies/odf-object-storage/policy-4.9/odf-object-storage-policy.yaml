@@ -44,9 +44,9 @@ spec:
                 name: ocs-operator
                 namespace: openshift-storage
               spec:
-                channel: stable-4.10
+                channel: stable-4.9
                 installPlanApproval: Automatic
-                name: odf-operator
+                name: ocs-operator
                 source: redhat-operators
                 sourceNamespace: openshift-marketplace
           - complianceType: musthave
@@ -63,56 +63,80 @@ spec:
       apiVersion: policy.open-cluster-management.io/v1
       kind: ConfigurationPolicy
       metadata:
-        name: object-storage-storagesystem
+        name: object-storage-noobaa-deployment
       spec:
         remediationAction: inform
         severity: high
         object-templates:
           - complianceType: musthave
             objectDefinition:
-              apiVersion: odf.openshift.io/v1alpha1
-              kind: StorageSystem
+              apiVersion: noobaa.io/v1alpha1
+              kind: NooBaa
               metadata:
-                name: ocs-storagecluster-storagesystem
+                name: noobaa
                 namespace: openshift-storage
               spec:
-                kind: storagecluster.ocs.openshift.io/v1
-                name: ocs-storagecluster
-                namespace: openshift-storage
+              dbResources:
+                requests:
+                  cpu: '0.1'
+                  memory: 1Gi
+              dbType: postgres
+              coreResources:
+                requests:
+                  cpu: '0.1'
+                  memory: 1Gi
   - objectDefinition:
       apiVersion: policy.open-cluster-management.io/v1
       kind: ConfigurationPolicy
       metadata:
-        name: object-storage-storagecluster
+        name: object-storage-backing-store
       spec:
         remediationAction: inform
         severity: high
         object-templates:
           - complianceType: musthave
             objectDefinition:
-              apiVersion: ocs.openshift.io/v1
-              kind: StorageCluster
+              apiVersion: noobaa.io/v1alpha1
+              kind: BackingStore
               metadata:
-                name: ocs-storagecluster
+                finalizers:
+                - noobaa.io/finalizer
+                labels:
+                  app: noobaa
+                name: noobaa-pv-backing-store
                 namespace: openshift-storage
               spec:
-                arbiter: {}
-                encryption:
-                  kms: {}
-                externalStorage: {}
-                managedResources:
-                  cephBlockPools: {}
-                  cephCluster: {}
-                  cephConfig: {}
-                  cephDashboard: {}
-                  cephFilesystems: {}
-                  cephObjectStoreUsers: {}
-                  cephObjectStores: {}
-                mirroring: {}
-                multiCloudGateway:
-                  dbStorageClassName: gp2
-                  reconcileStrategy: standalone
-                version: 4.10.0
+                pvPool:
+                  numVolumes: 1
+                  resources:
+                    requests:
+                      storage: 50Gi
+                type: pv-pool
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
+        name: object-storage-default-class
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: noobaa.io/v1alpha1
+              kind: BucketClass
+              metadata:
+                name: noobaa-default-bucket-class
+                namespace: openshift-storage
+                labels:
+                  app: noobaa
+                annotations:
+                  apps.open-cluster-management.io/reconcile-option: replace
+              spec:
+                placementPolicy:
+                  tiers:
+                    - backingStores:
+                        - noobaa-pv-backing-store
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
@@ -137,7 +161,18 @@ spec:
     type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
+      - key: local-cluster
+        operator: In
+        values:
+          - "true"
       - key: odfVersion
         operator: In
         values:
-          - "4.10"
+          - "4.9"
+      - key: demo
+        operator: In
+        values:
+          - "acm-observability"
+          - "quay"
+          - "mtc"
+

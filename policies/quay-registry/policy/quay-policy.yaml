@@ -105,4 +105,7 @@ spec:
     type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - {key: quay, operator: In, values: ["true"]}
+      - key: quay
+        operator: In
+        values:
+          - "true"
