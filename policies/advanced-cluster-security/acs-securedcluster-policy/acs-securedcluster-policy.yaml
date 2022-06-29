@@ -78,8 +78,7 @@ spec:
                   {{ fromSecret "open-cluster-management-agent" "hub-kubeconfig-secret" "cluster-name" | base64dec }}
                 auditLogs:
                   collection: Auto
-                centralEndpoint: |
-                  {{hub (lookup "v1" "Route" "stackrox" "central").spec.host hub}}
+                centralEndpoint: "console-openshift-console.apps.cluster-qlt6c.qlt6c.sandbox1255.opentlc.com"
                 admissionControl:
                   listenOnCreates: false
                   listenOnEvents: true
