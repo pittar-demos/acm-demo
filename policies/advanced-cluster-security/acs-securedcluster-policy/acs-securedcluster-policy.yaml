@@ -79,7 +79,7 @@ spec:
                 auditLogs:
                   collection: Auto
                 centralEndpoint: |
-                  {{ fromSecret "stackrox" "sensor-tls" "acs-host" | base64dec }}
+                  {{hub (lookup "v1" "Route" "stackrox" "central").spec.host hub}}
                 admissionControl:
                   listenOnCreates: false
                   listenOnEvents: true
