@@ -74,11 +74,11 @@ spec:
                 namespace: stackrox
                 name: stackrox-secured-cluster-services
               spec:
-                clusterName: |
-                  {{ fromSecret "open-cluster-management-agent" "hub-kubeconfig-secret" "cluster-name" | base64dec }}
+                clusterName: "local-cluster"
+                  #{{ fromSecret "open-cluster-management-agent" "hub-kubeconfig-secret" "cluster-name" | base64dec }}
                 auditLogs:
                   collection: Auto
-                centralEndpoint: "console-openshift-console.apps.cluster-qlt6c.qlt6c.sandbox1255.opentlc.com"
+                #centralEndpoint: "console-openshift-console.apps.cluster-qlt6c.qlt6c.sandbox1255.opentlc.com"
                 admissionControl:
                   listenOnCreates: false
                   listenOnEvents: true
