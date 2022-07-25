@@ -15,7 +15,7 @@ Once the ACM Operator is installed, create a "MultiClusterHub" instance in the `
 Run the following command to install the operator:
 
 ```
-oc apply -k https://github.com/redhat-cop/gitops-catalog/advanced-cluster-management/operator/overlays/release-2.4
+oc apply -k https://github.com/redhat-cop/gitops-catalog/advanced-cluster-management/operator/overlays/release-2.5
 ```
 
 Once the operator is installed, run this command to install the ACM Hub:
