@@ -63,16 +63,10 @@ spec:
               apiVersion: platform.stackrox.io/v1alpha1
               kind: Central
               metadata:
-                namespace: stackrox
                 name: stackrox-central-services
+                namespace: stackrox
               spec:
                 central:
-                  resources:
-                    limits:
-                      memory: 2Gi
-                    requests:
-                      cpu: 500m
-                      memory: 512Mi
                   exposure:
                     loadBalancer:
                       enabled: false
@@ -87,17 +81,11 @@ spec:
                 egress:
                   connectivityPolicy: Online
                 scanner:
-                  resources:
-                    limits:
-                      memory: 1Gi
-                    requests:
-                      cpu: 250m
-                      memory: 500Mi
                   analyzer:
                     scaling:
-                      autoScaling: Disabled
-                      maxReplicas: 5
-                      minReplicas: 2
+                      autoScaling: Enabled
+                      maxReplicas: 3
+                      minReplicas: 1
                       replicas: 2
                   scannerComponent: Enabled
   - objectDefinition:
@@ -204,7 +192,7 @@ spec:
                 template:
                   spec:
                     containers:
-                      - image: quay.io/pittar/acs-deploy-bundle-job:latest
+                      - image: quay.io/pittar/acs-deploy-bundle-job:new-acm-process
                         env:
                         - name: PASSWORD
                           valueFrom:
