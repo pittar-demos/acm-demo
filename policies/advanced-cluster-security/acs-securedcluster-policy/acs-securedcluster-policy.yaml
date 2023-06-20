@@ -61,6 +61,62 @@ spec:
       apiVersion: policy.open-cluster-management.io/v1
       kind: ConfigurationPolicy
       metadata:
+        name: acs-secrets
+      spec:
+        remediationAction: inform
+        severity: high
+        object-templates:
+          - complianceType: musthave
+            objectDefinition:
+              kind: Secret
+              apiVersion: v1
+              metadata:
+                name: admission-control-tls
+                namespace: stackrox
+              type: Opaque
+              data:
+                admission-control-cert.pem: |
+                  {{hub fromSecret "stackrox" "bundle-admission-control-tls" "admission-control-cert.pem" hub}}
+                admission-control-key.pem: |
+                  {{hub fromSecret "stackrox" "bundle-admission-control-tls" "admission-control-key.pem" hub}}
+                ca.pem: |
+                  {{hub fromSecret "stackrox" "bundle-admission-control-tls" "ca.pem" hub}}
+          - complianceType: musthave
+            objectDefinition:
+              kind: Secret
+              apiVersion: v1
+              metadata:
+                name: collector-tls
+                namespace: stackrox
+              type: Opaque
+              data:
+                ca.pem: |
+                  {{hub fromSecret "stackrox" "bundle-collector-tls" "ca.pem" hub}}
+                collector-cert.pem: |
+                  {{hub fromSecret "stackrox" "bundle-collector-tls" "collector-cert.pem" hub}}
+                collector-key.pem: |
+                  {{hub fromSecret "stackrox" "bundle-collector-tls" "collector-key.pem" hub}}
+          - complianceType: musthave
+            objectDefinition:
+              kind: Secret
+              apiVersion: v1
+              metadata:
+                name: sensor-tls
+                namespace: stackrox
+              type: Opaque
+              data:
+                acs-host: |
+                  {{hub fromSecret "stackrox" "bundle-sensor-tls" "acs-host" hub}}
+                ca.pem: |
+                  {{hub fromSecret "stackrox" "bundle-sensor-tls" "ca.pem" hub}}
+                sensor-cert.pem: |
+                  {{hub fromSecret "stackrox" "bundle-sensor-tls" "sensor-cert.pem" hub}}
+                sensor-key.pem: |
+                  {{hub fromSecret "stackrox" "bundle-sensor-tls" "sensor-key.pem" hub}}
+  - objectDefinition:
+      apiVersion: policy.open-cluster-management.io/v1
+      kind: ConfigurationPolicy
+      metadata:
         name: acs-endpoints
       spec:
         remediationAction: inform
@@ -74,11 +130,12 @@ spec:
                 namespace: stackrox
                 name: stackrox-secured-cluster-services
               spec:
-                clusterName: "local-cluster"
-                  #{{ fromSecret "open-cluster-management-agent" "hub-kubeconfig-secret" "cluster-name" | base64dec }}
+                clusterName: |
+                  {{ fromSecret "open-cluster-management-agent" "hub-kubeconfig-secret" "cluster-name" | base64dec }}
                 auditLogs:
                   collection: Auto
-                #centralEndpoint: "console-openshift-console.apps.cluster-qlt6c.qlt6c.sandbox1255.opentlc.com"
+                centralEndpoint: |
+                  {{ fromSecret "stackrox" "sensor-tls" "acs-host" | base64dec }}
                 admissionControl:
                   listenOnCreates: false
                   listenOnEvents: true
@@ -112,11 +169,7 @@ spec:
     type: ManagedClusterConditionAvailable
   clusterSelector:
     matchExpressions:
-      - key: local-cluster
+      - key: vendor
         operator: In
         values:
-          - "true"
-      - key: demo
-        operator: In
-        values:
-          - "devsecops"
+          - "OpenShift"

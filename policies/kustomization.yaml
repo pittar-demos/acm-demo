@@ -12,7 +12,7 @@ bases:
   - odf-object-storage
   - oadp-operator
   - openshift-oauth
-  #- openshift-gitops
+  - openshift-gitops
   - openshift-pipelines
   - quay-registry
   #- codeready-workspaces
