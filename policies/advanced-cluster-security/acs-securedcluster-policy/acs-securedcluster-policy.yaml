@@ -52,7 +52,7 @@ spec:
                 name: rhacs-operator
                 namespace: openshift-operators
               spec:
-                channel: latest
+                channel: stable
                 installPlanApproval: Automatic
                 name: rhacs-operator
                 source: redhat-operators

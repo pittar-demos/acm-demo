@@ -44,7 +44,7 @@ spec:
                 name: rhacs-operator
                 namespace: openshift-operators
               spec:
-                channel: latest
+                channel: stable
                 installPlanApproval: Automatic
                 name: rhacs-operator
                 source: redhat-operators
@@ -244,7 +244,3 @@ spec:
         operator: In
         values:
           - "true"
-      - key: demo
-        operator: In
-        values:
-          - "devsecops"
