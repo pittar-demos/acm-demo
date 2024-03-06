@@ -57,6 +57,7 @@ spec:
                 name: rhacs-operator
                 source: redhat-operators
                 sourceNamespace: openshift-marketplace
+                startingCSV: rhacs-operator.v4.3.4
   - objectDefinition:
       apiVersion: policy.open-cluster-management.io/v1
       kind: ConfigurationPolicy
@@ -142,7 +143,7 @@ spec:
                   listenOnUpdates: false
                 perNode:
                   collector:
-                    collection: KernelModule
+                    collection: EBPF
                     imageFlavor: Regular
                   taintToleration: TolerateTaints
 ---

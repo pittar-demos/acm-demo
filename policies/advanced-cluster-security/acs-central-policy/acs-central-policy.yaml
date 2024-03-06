@@ -27,6 +27,12 @@ spec:
               kind: Namespace
               metadata:
                 name: stackrox
+          - complianceType: musthave
+            objectDefinition:
+              apiVersion: v1
+              kind: Namespace
+              metadata:
+                name: rhacs-operator
   - objectDefinition:
       apiVersion: policy.open-cluster-management.io/v1
       kind: ConfigurationPolicy
@@ -42,13 +48,14 @@ spec:
               kind: Subscription
               metadata:
                 name: rhacs-operator
-                namespace: openshift-operators
+                namespace: rhacs-operator
               spec:
                 channel: stable
                 installPlanApproval: Automatic
                 name: rhacs-operator
                 source: redhat-operators
                 sourceNamespace: openshift-marketplace
+                startingCSV: rhacs-operator.v4.3.4
   - objectDefinition:
       apiVersion: policy.open-cluster-management.io/v1
       kind: ConfigurationPolicy
