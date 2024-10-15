@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: acm-custom-policies
 
 resources:
-  - compliance-operator-policy.yaml
+  - acs-central-policy.yaml

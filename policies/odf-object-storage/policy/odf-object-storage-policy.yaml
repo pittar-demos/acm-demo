@@ -44,7 +44,7 @@ spec:
                 name: ocs-operator
                 namespace: openshift-storage
               spec:
-                channel: stable-4.10
+                channel: stable-4.13
                 installPlanApproval: Automatic
                 name: odf-operator
                 source: redhat-operators
@@ -110,9 +110,9 @@ spec:
                   cephObjectStores: {}
                 mirroring: {}
                 multiCloudGateway:
-                  dbStorageClassName: gp2
+                  dbStorageClassName: gp3
                   reconcileStrategy: standalone
-                version: 4.10.0
+                version: 4.13.0
 ---
 apiVersion: policy.open-cluster-management.io/v1
 kind: PlacementBinding
@@ -140,4 +140,4 @@ spec:
       - key: odfVersion
         operator: In
         values:
-          - "4.10"
+          - "4.13"
